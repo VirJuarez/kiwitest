@@ -1,26 +1,56 @@
-# Usa una imagen Node.js que coincida con tu configuración
-FROM node:20-alpine
+# base node image
+FROM node:20 as base
 
-# Establece el directorio de trabajo
+# Install openssl for Prisma
+RUN apt-get update && apt-get install -y openssl
+
+# Install all node_modules, including dev dependencies
+FROM base as deps
+
+RUN mkdir /app
 WORKDIR /app
 
-# Copia solo los archivos necesarios primero
-COPY package*.json ./
+ADD package.json package-lock.json ./
+RUN npm install --production=false
 
-# Instala dependencias
-RUN npm install
+# Setup production node_modules
+FROM base as production-deps
 
-# Copia el resto del código
-COPY . .
+ENV NODE_ENV production
 
-# Genera Prisma Client
+RUN mkdir /app
+WORKDIR /app
+
+COPY --from=deps /app/node_modules /app/node_modules
+ADD package.json package-lock.json ./
+RUN npm prune --production
+
+# Build the app
+FROM base as build
+
+RUN mkdir /app
+WORKDIR /app
+
+COPY --from=deps /app/node_modules /app/node_modules
+
+ADD prisma .
 RUN npx prisma generate
 
-# Construye la aplicación
+ADD . .
 RUN npm run build
 
-# Expone el puerto
-EXPOSE 3000
+# Finally, build the production image with minimal footprint
+FROM base
 
-# Comando para iniciar la app
+ENV NODE_ENV production
+
+RUN mkdir /app
+WORKDIR /app
+
+COPY --from=production-deps /app/node_modules /app/node_modules
+COPY --from=build /app/node_modules/.prisma /app/node_modules/.prisma
+COPY --from=build /app/build /app/build
+COPY --from=build /app/public /app/public
+ADD . .
+
 CMD ["npm", "run", "start"]

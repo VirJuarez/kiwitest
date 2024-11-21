@@ -23,6 +23,7 @@ import Avatar from "~/components/Avatar";
 import Card from "~/components/Card";
 
 export const loader: LoaderFunction = async ({ request }) => {
+  try{
   const url = new URL(request.url);
   const clientId = url.searchParams.get("edit");
   
@@ -34,7 +35,13 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json({ 
     clients, 
     editingClient 
-  });
+  });}
+  catch (error){
+    console.error('Error detallado:', error);
+    // Manejo específico de errores
+    throw new Error(`Error en clients route: ${error}`);
+
+  }
 };
 
 export const action: ActionFunction = async ({ request }) => {

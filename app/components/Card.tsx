@@ -29,7 +29,7 @@ export default function Card({
       <div className="flex items-center gap-4 mb-3 w-full">
         <Avatar name={`${avatar}`} />
         <h2 className="text-2xl font-semibold">{title}</h2>
-        <p className="text-sm ml-auto">Created: {createdAt}</p>
+        {createdAt && <p className="text-sm ml-auto">Created: {createdAt}</p>}
       </div>
       {attributes.map((attr, index) => (
         <p key={index}>

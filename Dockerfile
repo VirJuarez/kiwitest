@@ -14,7 +14,7 @@ RUN npx prisma generate
 RUN npm run build
 
 # Expone el puerto
-EXPOSE 8080
+EXPOSE 3000
 
 # Comando para iniciar la app
 CMD ["npm", "run", "start"]

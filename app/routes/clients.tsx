@@ -18,6 +18,8 @@ import {
 } from "~/models/client.server";
 import Card from "~/components/Card";
 import React, { useState } from "react";
+import DeleteModal from "~/components/DeleteModal";
+import FormModal from "~/components/FormModal";
 
 export const loader: LoaderFunction = async ({ request }) => {
   try {
@@ -144,120 +146,22 @@ export default function Clients() {
         </div>
 
         {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg w-96">
-              <h2 className="text-xl font-bold mb-4">
-                {editingClient ? "Edit Client" : "New Client"}
-              </h2>
-              <Form method="post" className="space-y-4">
-                {editingClient && (
-                  <input type="hidden" name="id" value={editingClient.id} />
-                )}
-                <div>
-                  <label className="block mb-2">Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    defaultValue={editingClient?.name}
-                    className="w-full border rounded p-2"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block mb-2">Surname</label>
-                  <input
-                    type="text"
-                    name="surname"
-                    defaultValue={editingClient?.surname}
-                    className="w-full border rounded p-2"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block mb-2">Address</label>
-                  <input
-                    type="text"
-                    name="address"
-                    defaultValue={editingClient?.address}
-                    className="w-full border rounded p-2"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block mb-2">Phone</label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    defaultValue={editingClient?.phone}
-                    className="w-full border rounded p-2"
-                    required
-                  />
-                </div>
-
-                {actionData?.error && (
-                  <div className="text-red-500">{actionData.error}</div>
-                )}
-                <div className="flex justify-end space-x-2">
-                  <button
-                    type="button"
-                    onClick={closeModal}
-                    className="bg-gray-200 px-4 py-2 rounded"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={navigation.state === "submitting"}
-                    className="bg-blue-500 text-white px-4 py-2 rounded"
-                  >
-                    {navigation.state === "submitting" ? "Saving..." : "Save"}
-                  </button>
-                </div>
-              </Form>
-            </div>
-          </div>
+          <FormModal
+            navigation={navigation}
+            fields={["name", "surname", "address", "phone"]}
+            closeModal={closeModal}
+            editingClient={editingClient}
+            actionData={actionData}
+          />
         )}
-        {/** Modal para confirmar eliminación */}
+
         {isDeleteModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div
-              className="bg-white p-6 rounded-lg w-96"
-              role="dialog"
-              aria-labelledby="delete-modal-title"
-            >
-              <h2 id="delete-modal-title" className="text-xl font-bold mb-4">
-                Confirm Delete
-              </h2>
-              <p>Are you sure you want to delete this client?</p>
-              <p>Associated orders will be deleted too</p>
-              <Form method="post">
-                <input
-                  type="hidden"
-                  name="id"
-                  value={searchParams.get("delete") || ""}
-                />
-                <input type="hidden" name="_action" value="delete" />
-                <div className="flex justify-end space-x-2 mt-4">
-                  <button
-                    type="button"
-                    onClick={closeModal}
-                    className="bg-gray-200 px-4 py-2 rounded"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                    disabled={navigation.state === "submitting"}
-                  >
-                    {navigation.state === "submitting"
-                      ? "Deleting..."
-                      : "Delete"}
-                  </button>
-                </div>
-              </Form>
-            </div>
-          </div>
+          <DeleteModal
+            navigation={navigation}
+            text="Are you sure you want to delete this client? Associated orders will be deleted too"
+            closeModal={closeModal}
+            searchParams={searchParams}
+          />
         )}
       </Layout>
     </div>

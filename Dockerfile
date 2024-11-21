@@ -29,3 +29,12 @@ COPY --from=build /app/build ./build
 COPY --from=build /app/public ./public
 COPY --from=build /app/package*.json ./
 COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
+
+# Install only production dependencies
+RUN npm ci --only=production
+
+# Expose the port your app runs on
+EXPOSE 3000
+
+# Set the command to start your app
+CMD ["npm", "start"]

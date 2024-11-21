@@ -7,7 +7,7 @@ import Avatar from "./Avatar";
 
 interface CardProps {
   id: number;
-  avatar: string;
+  avatar?: string;
   title: string;
   createdAt?: string;
   deleteAction?: (e: React.FormEvent) => void;
@@ -27,7 +27,7 @@ export default function Card({
   return (
     <div key={id} className="border p-4 rounded-xl bg-white">
       <div className="flex items-center gap-4 mb-3 w-full">
-        <Avatar name={`${avatar}`} />
+        {avatar && <Avatar name={`${avatar}`} />}
         <h2 className="text-2xl font-semibold">{title}</h2>
         {createdAt && <p className="text-sm ml-auto">Created: {createdAt}</p>}
       </div>

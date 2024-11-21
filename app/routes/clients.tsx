@@ -23,8 +23,10 @@ export const loader: LoaderFunction = async ({ request }) => {
   try {
     const url = new URL(request.url);
     const clientId = url.searchParams.get("edit");
+    const sortOrder =
+      (url.searchParams.get("sortOrder") as "asc" | "desc") || "asc";
 
-    const clients = await getClients();
+    const clients = await getClients(sortOrder);
     const editingClient = clientId
       ? await getClientById(Number(clientId))
       : null;
@@ -32,6 +34,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     return json({
       clients,
       editingClient,
+      sortOrder,
     });
   } catch (error) {
     console.error("Error detallado:", error);
@@ -77,7 +80,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Clients() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { clients, editingClient } = useLoaderData<typeof loader>();
+  const { clients, editingClient, sortOrder } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const actionData = useActionData<typeof action>();
 
@@ -101,6 +104,16 @@ export default function Clients() {
   return (
     <div className="bg-lime-100 w-full min-h-screen m-0 ">
       <Layout title="Clients" action={openNewModal} color="bg-lime-700">
+        <Form method="get">
+          <button
+            type="submit"
+            name="sortOrder"
+            value={sortOrder === "asc" ? "desc" : "asc"}
+            className="bg-lime-600 text-white px-4 py-2 rounded"
+          >
+            Sort {sortOrder === "asc" ? "A/Z" : "Z/A"}
+          </button>
+        </Form>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {clients.map(
             (client: {

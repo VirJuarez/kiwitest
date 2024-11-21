@@ -23,8 +23,10 @@ import Card from "~/components/Card";
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
   const restaurantId = url.searchParams.get("edit");
+  const sortOrder =
+    (url.searchParams.get("sortOrder") as "asc" | "desc") || "asc";
 
-  const restaurants = await getRestaurants();
+  const restaurants = await getRestaurants(sortOrder);
   const editingRestaurant = restaurantId
     ? await getRestaurantById(Number(restaurantId))
     : null;
@@ -32,6 +34,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json({
     restaurants,
     editingRestaurant,
+    sortOrder,
   });
 };
 
@@ -69,7 +72,8 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Restaurants() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { restaurants, editingRestaurant } = useLoaderData<typeof loader>();
+  const { restaurants, editingRestaurant, sortOrder } =
+    useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const actionData = useActionData<typeof action>();
 
@@ -93,6 +97,16 @@ export default function Restaurants() {
   return (
     <div className="bg-orange-100 w-full min-h-screen m-0 ">
       <Layout title="Restaurants" action={openNewModal} color="bg-orange-700">
+        <Form method="get">
+          <button
+            type="submit"
+            name="sortOrder"
+            value={sortOrder === "asc" ? "desc" : "asc"}
+            className="bg-orange-600 text-white px-4 py-2 rounded"
+          >
+            Sort {sortOrder === "asc" ? "A/Z" : "Z/A"}
+          </button>
+        </Form>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {restaurants.map(
             (restaurant: {

@@ -28,8 +28,15 @@ export type DetailedOrder = {
   completedAt?: Date;
 };
 
-export async function getOrders() {
+export async function getOrders(filters?: {
+  restaurantId?: number;
+  clientId?: number;
+}) {
   return db.order.findMany({
+    where: {
+      ...(filters?.restaurantId && { restaurantId: filters.restaurantId }),
+      ...(filters?.clientId && { clientId: filters.clientId }),
+    },
     include: {
       restaurant: {
         select: { id: true, name: true },

@@ -1,19 +1,31 @@
-# Usa una imagen Node.js
-FROM node:18-alpine
+# Use the official Node.js 20 image as a parent image
+FROM node:20-alpine as build
 
-# Establece el directorio de trabajo
+# Set the working directory
 WORKDIR /app
 
-# Copia los archivos al contenedor
+# Copy package.json and package-lock.json (if available)
 COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy the rest of your app's source code
 COPY . .
 
-# Instala las dependencias y construye la aplicación
-RUN npm install
+# Generate Prisma client
+RUN npx prisma generate
+
+# Build your Remix app
 RUN npm run build
 
-# Expone el puerto
-EXPOSE 8080
+# Use a smaller base image for the final stage
+FROM node:20-alpine
 
-# Comando para iniciar la app
-CMD ["npm", "run", "start"]
+WORKDIR /app
+
+# Copy built assets from the build stage
+COPY --from=build /app/build ./build
+COPY --from=build /app/public ./public
+COPY --from=build /app/package*.json ./
+COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma

@@ -153,6 +153,7 @@ export default function Orders() {
               id={order.id}
               avatar={`# ${order.id}`}
               title={`Order #${order.id}`}
+              createdAt={`${dayjs(order.createdAt).format("MM-DD-YYYY HH:mm")}`}
               attributes={[
                 { key: "Restaurant", label: order.restaurant.name },
                 {

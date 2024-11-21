@@ -10,7 +10,7 @@ export type Order = {
   id: number;
   restaurantId: number;
   clientId: number;
-  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
+  status: "PENDING" | "IN_PROGRESS" | "COMPLETED";
   items: OrderItem[];
   total: number;
   createdAt: Date;
@@ -18,29 +18,29 @@ export type Order = {
 };
 
 export type DetailedOrder = {
-    id: number;
-    restaurant: {name:string, id:number};
-    client: {name:string, surname:string, id:number};
-    status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
-    items: OrderItem[];
-    total: number;
-    createdAt: Date;
-    completedAt?: Date;
-  };
+  id: number;
+  restaurant: { name: string; id: number };
+  client: { name: string; surname: string; id: number };
+  status: "PENDING" | "IN_PROGRESS" | "COMPLETED";
+  items: OrderItem[];
+  total: number;
+  createdAt: Date;
+  completedAt?: Date;
+};
 
 export async function getOrders() {
   return db.order.findMany({
     include: {
-        restaurant: {
-          select: { id: true, name: true }
-        },
-        client: {
-          select: { id: true, name: true, surname: true }
-        }
+      restaurant: {
+        select: { id: true, name: true },
       },
-      orderBy: { createdAt: 'desc' }
-    });
-  }
+      client: {
+        select: { id: true, name: true, surname: true },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+}
 
 export async function createOrder(
   data: Pick<Order, "restaurantId" | "clientId" | "status" | "items" | "total">
@@ -51,27 +51,33 @@ export async function createOrder(
       clientId: data.clientId,
       status: data.status,
       items: data.items as any,
-      total: data.total
-    }
+      total: data.total,
+    },
   });
 }
 
 export async function updateOrder(
-  id: number, 
-  data: Partial<Pick<Order, "status" | "items" | "total" | "completedAt" | "restaurantId" |"clientId" >>
+  id: number,
+  data: Partial<
+    Pick<
+      Order,
+      "status" | "items" | "total" | "completedAt" | "restaurantId" | "clientId"
+    >
+  >
 ) {
   return db.order.update({
     where: { id },
     data: {
       ...data,
-      ...(data.items && { items: data.items as any })
-    }
+      ...(data.status === "COMPLETED" && { completedAt: new Date() }),
+      ...(data.items && { items: data.items as any }),
+    },
   });
 }
 
 export async function deleteOrder(id: number) {
   return db.order.delete({
-    where: { id }
+    where: { id },
   });
 }
 
@@ -80,19 +86,19 @@ export async function getOrderById(id: number) {
     where: { id },
     include: {
       restaurant: true,
-      client: true
-    }
+      client: true,
+    },
   });
 }
 
 export async function getRestaurantsAndClients() {
   const restaurants = await db.restaurant.findMany({
-    orderBy: { name: 'asc' }
+    orderBy: { name: "asc" },
   });
-  
+
   const clients = await db.client.findMany({
-    orderBy: { name: 'asc' }
+    orderBy: { name: "asc" },
   });
-  
+
   return { restaurants, clients };
 }

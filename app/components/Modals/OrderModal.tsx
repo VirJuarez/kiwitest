@@ -1,6 +1,7 @@
 import { Form, Navigation } from "@remix-run/react";
 import { Client } from "~/models/client.server";
 import { Restaurant } from "~/models/restaurant.server";
+import { OrderItem, DetailedOrder } from "~/models/order.server";
 
 interface ModalProps {
   navigation: Navigation;
@@ -8,11 +9,11 @@ interface ModalProps {
   actionData: any;
   restaurants: Restaurant[];
   clients: Client[];
-  orderStatuses: any;
-  orderItems: any;
+  orderStatuses: Record<string, string>;
+  orderItems: OrderItem[];
   setOrderItems: (value: React.SetStateAction<any[]>) => void;
   edit: boolean;
-  editingOrder?: any;
+  editingOrder?: DetailedOrder;
 }
 
 export default function OrderModal({
@@ -29,11 +30,7 @@ export default function OrderModal({
 }: ModalProps) {
   const calculateTotal = () => {
     return orderItems
-      .reduce(
-        (sum: any, item: { quantity: any; unitPrice: any }) =>
-          sum + item.quantity * item.unitPrice,
-        0
-      )
+      .reduce((sum, item) => sum + item.quantity * item.unitPrice, 0)
       .toFixed(2);
   };
 
@@ -51,7 +48,7 @@ export default function OrderModal({
   };
 
   const removeOrderItem = (index: number) => {
-    const newItems = orderItems.filter((_: any, i: any) => i !== index);
+    const newItems = orderItems.filter((_, i) => i !== index);
     setOrderItems(newItems);
   };
 
@@ -69,7 +66,7 @@ export default function OrderModal({
             {edit ? (
               <input
                 type="text"
-                value={editingOrder.restaurant.name}
+                value={editingOrder?.restaurant.name}
                 className="w-full border rounded p-2 bg-gray-100"
                 readOnly
               />
@@ -95,7 +92,7 @@ export default function OrderModal({
             {edit ? (
               <input
                 type="text"
-                value={`${editingOrder.client.name} ${editingOrder.client.surname}`}
+                value={`${editingOrder?.client.name} ${editingOrder?.client.surname}`}
                 className="w-full border rounded p-2 bg-gray-100"
                 readOnly
               />
@@ -119,7 +116,7 @@ export default function OrderModal({
           <div>
             <label className="block mb-2">Items</label>
             {edit
-              ? editingOrder.items.map((item: any, index: number) => (
+              ? editingOrder?.items.map((item, index) => (
                   <div key={index} className="flex space-x-2 mb-2">
                     <input
                       type="text"
@@ -131,7 +128,7 @@ export default function OrderModal({
                     />
                   </div>
                 ))
-              : orderItems.map((item: any, index: any) => (
+              : orderItems.map((item, index) => (
                   <div key={index} className="flex space-x-2 mb-2">
                     <div className="flex flex-col w-1/5">
                       <label className="text-xs">Quantity</label>
@@ -209,7 +206,7 @@ export default function OrderModal({
             {editingOrder?.status !== "COMPLETED" ? (
               <select
                 name="status"
-                defaultValue={edit ? editingOrder.status : "PENDING"}
+                defaultValue={edit ? editingOrder?.status : "PENDING"}
                 className="w-full border rounded p-2"
                 required
               >
@@ -250,7 +247,7 @@ export default function OrderModal({
           {/* Total Display */}
           <div className="mt-4 text-right">
             <strong>
-              Total: {edit ? editingOrder.total.toFixed(2) : calculateTotal()}
+              Total: {edit ? editingOrder?.total.toFixed(2) : calculateTotal()}
             </strong>
           </div>
 

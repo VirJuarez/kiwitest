@@ -11,6 +11,7 @@ import FormModal from "~/components/Modals/FormModal";
 import OrderAZ from "~/components/OrderFilter/OrderAZ";
 import { loader, action } from "~/utils/restaurants.functions";
 import NoObjectCard from "~/components/Card/NoObjectCard";
+import { Restaurant } from "~/models/restaurant.server";
 export { loader, action };
 
 export default function Restaurants() {
@@ -52,31 +53,24 @@ export default function Restaurants() {
           <div>
             <OrderAZ sortOrder={sortOrder} color="bg-orange-700" />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {restaurants.map(
-                (restaurant: {
-                  name: string;
-                  address: string;
-                  phone: string;
-                  id: number;
-                }) => (
-                  <Card
-                    id={restaurant.id}
-                    avatar={restaurant.name}
-                    title={restaurant.name}
-                    attributes={[
-                      { key: "Address", label: restaurant.address },
-                      { key: "Phone", label: restaurant.phone },
-                    ]}
-                    editAction={() =>
-                      setSearchParams({ edit: restaurant.id.toString() })
-                    }
-                    deleteAction={(e) => {
-                      e.preventDefault();
-                      openDeleteModal(restaurant.id);
-                    }}
-                  />
-                )
-              )}
+              {restaurants.map((restaurant: Restaurant) => (
+                <Card
+                  id={restaurant.id}
+                  avatar={restaurant.name}
+                  title={restaurant.name}
+                  attributes={[
+                    { key: "Address", label: restaurant.address },
+                    { key: "Phone", label: restaurant.phone },
+                  ]}
+                  editAction={() =>
+                    setSearchParams({ edit: restaurant.id.toString() })
+                  }
+                  deleteAction={(e) => {
+                    e.preventDefault();
+                    openDeleteModal(restaurant.id);
+                  }}
+                />
+              ))}
             </div>
           </div>
         )}

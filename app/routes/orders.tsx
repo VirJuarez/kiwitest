@@ -78,7 +78,6 @@ export default function Orders() {
                 <Card
                   key={order.id}
                   id={order.id}
-                  avatar={`# ${order.id}`}
                   title={`Order #${order.id}`}
                   createdAt={`${dayjs(order.createdAt).format(
                     "MM-DD-YYYY HH:mm"

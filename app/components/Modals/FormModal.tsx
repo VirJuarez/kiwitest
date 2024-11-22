@@ -5,7 +5,10 @@ interface ModalProps {
   fields: string[];
   closeModal: () => void;
   actionData: any;
-  editing: any;
+  editing: {
+    id: number;
+    [key: string]: any;
+  } | null;
   title: string;
 }
 

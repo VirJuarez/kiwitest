@@ -5,7 +5,7 @@ import {
   useActionData,
   useLoaderData,
 } from "@remix-run/react";
-
+import { Client } from "~/models/client.server";
 import Card from "~/components/Card/Card";
 import DeleteModal from "~/components/Modals/DeleteModal";
 import FormModal from "~/components/Modals/FormModal";
@@ -52,32 +52,24 @@ export default function Clients() {
           <div>
             <OrderAZ sortOrder={sortOrder} color="bg-lime-700" />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {clients.map(
-                (client: {
-                  name: string;
-                  surname: string;
-                  address: string;
-                  phone: string;
-                  id: number;
-                }) => (
-                  <Card
-                    id={client.id}
-                    avatar={`${client.name} ${client.surname}`}
-                    title={`${client.name} ${client.surname}`}
-                    attributes={[
-                      { key: "Address", label: client.address },
-                      { key: "Phone", label: client.phone },
-                    ]}
-                    editAction={() =>
-                      setSearchParams({ edit: client.id.toString() })
-                    }
-                    deleteAction={(e) => {
-                      e.preventDefault();
-                      openDeleteModal(client.id);
-                    }}
-                  />
-                )
-              )}
+              {clients.map((client: Client) => (
+                <Card
+                  id={client.id}
+                  avatar={`${client.name} ${client.surname}`}
+                  title={`${client.name} ${client.surname}`}
+                  attributes={[
+                    { key: "Address", label: client.address },
+                    { key: "Phone", label: client.phone },
+                  ]}
+                  editAction={() =>
+                    setSearchParams({ edit: client.id.toString() })
+                  }
+                  deleteAction={(e) => {
+                    e.preventDefault();
+                    openDeleteModal(client.id);
+                  }}
+                />
+              ))}
             </div>
           </div>
         )}

@@ -1,40 +1,75 @@
-# Welcome to Remix!
+# Restaurant Management System
 
-- 📖 [Remix docs](https://remix.run/docs)
+A full-stack application for managing Clients, Orders, and Restaurants built with Remix and TypeScript.
 
-## Development
+## 🚀 Live Demo
 
-Run the dev server:
+- [Application](https://kiwitest-741772251938.southamerica-east1.run.app/)
+- [GitHub Repository](https://github.com/VirJuarez/kiwitest)
 
-```shellscript
+## 🛠️ Tech Stack
+
+- **Framework:** Remix
+- **Styling:** Tailwind CSS
+- **Language:** TypeScript
+- **Database:** PostgreSQL (hosted on GCP)
+- **ORM:** Prisma
+- **Testing:** Jest
+- **Build Tool:** Vite
+
+## ✨ Features
+
+- **Home Page** with three main sections (Clients, Orders, Restaurants)
+- **CRUD Operations** for all entities
+- **Filters & Sorting:**
+  - Alphabetical sorting for Clients and Restaurants
+  - Client/Restaurant filtering for Orders
+- **User-friendly modals** for data management
+- **Responsive empty states** with clear call-to-action buttons
+
+## 🏗️ Local Setup
+
+### Prerequisites
+
+- Node.js v20+
+- PostgreSQL
+
+### Installation
+
+```bash
+# Clone repository
+git clone https://github.com/VirJuarez/kiwitest.git
+cd kiwitest
+
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-```
 
-## Deployment
-
-First, build your app for production:
-
-```sh
+# Build for production
 npm run build
-```
 
-Then run the app in production mode:
-
-```sh
+# Start production server
 npm start
 ```
 
-Now you'll need to pick a host to deploy it to.
+## 🐳 Docker Setup
 
-### DIY
+```bash
+# Build image
+docker build -t application-name .
 
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
+# Run container
+docker run -p 3000:3000 application-name
+```
 
-Make sure to deploy the output of `npm run build`
+Visit `http://localhost:3000` to access the application.
 
-- `build/server`
-- `build/client`
+## 🧪 Testing
 
-## Styling
+```bash
+npm test
+```
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+Tests run automatically via GitHub Actions on push/PR to `master` or `dev` branches.

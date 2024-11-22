@@ -12,6 +12,7 @@ import FormModal from "~/components/Modals/FormModal";
 import OrderAZ from "~/components/OrderFilter/OrderAZ";
 import { loader, action } from "~/utils/clients.functions";
 import NoObjectCard from "~/components/Card/NoObjectCard";
+import { GenericErrorBoundary } from "~/components/ErrorBoundary";
 export { loader, action };
 
 export default function Clients() {
@@ -96,4 +97,8 @@ export default function Clients() {
       </Layout>
     </div>
   );
+}
+
+export function ErrorBoundary() {
+  return <GenericErrorBoundary entityName="clients" />;
 }

@@ -183,7 +183,7 @@ export default function OrderModal({
                     <button
                       type="button"
                       onClick={() => removeOrderItem(index)}
-                      className="bg-red-500 text-white px-2 py-1 rounded mt-4"
+                      className="bg-red-500 text-white px-2 py-1 rounded-lg mt-4"
                     >
                       X
                     </button>
@@ -193,7 +193,7 @@ export default function OrderModal({
               <button
                 type="button"
                 onClick={addOrderItem}
-                className="bg-green-500 text-white px-2 py-1 rounded mt-2"
+                className="bg-green-500 text-white px-2 py-1 rounded-lg mt-2"
               >
                 + Add Item
               </button>
@@ -258,14 +258,14 @@ export default function OrderModal({
             <button
               type="button"
               onClick={closeModal}
-              className="bg-gray-200 px-4 py-2 rounded"
+              className="bg-gray-200 px-4 py-2 rounded-lg"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={navigation.state === "submitting"}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg"
             >
               {navigation.state === "submitting" ? "Saving..." : "Save"}
             </button>

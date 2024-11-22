@@ -8,6 +8,11 @@ export type Client = {
   phone: string;
 };
 
+//TEST ERROR BOUNDARY COMPONENT
+// export async function getClients(sortOrder: "asc" | "desc" = "asc") {
+//   throw new Error("Test error in getClients");
+// }
+
 export async function getClients(sortOrder: "asc" | "desc" = "asc") {
   return db.client.findMany({
     orderBy: [{ name: sortOrder }, { surname: sortOrder }],

@@ -12,6 +12,7 @@ import OrderAZ from "~/components/OrderFilter/OrderAZ";
 import { loader, action } from "~/utils/restaurants.functions";
 import NoObjectCard from "~/components/Card/NoObjectCard";
 import { Restaurant } from "~/models/restaurant.server";
+import { GenericErrorBoundary } from "~/components/ErrorBoundary";
 export { loader, action };
 
 export default function Restaurants() {
@@ -97,4 +98,8 @@ export default function Restaurants() {
       </Layout>
     </div>
   );
+}
+
+export function ErrorBoundary() {
+  return <GenericErrorBoundary entityName="clients" />;
 }

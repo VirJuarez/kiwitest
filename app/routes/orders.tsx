@@ -15,6 +15,7 @@ import OrderModal from "~/components/Modals/OrderModal";
 import Filter from "~/components/OrderFilter/Filter";
 import { loader, action } from "~/utils/orders.functions";
 import NoObjectCard from "~/components/Card/NoObjectCard";
+import { GenericErrorBoundary } from "~/components/ErrorBoundary";
 export { loader, action };
 
 const ORDER_STATUSES = {
@@ -139,4 +140,8 @@ export default function Orders() {
       </Layout>
     </div>
   );
+}
+
+export function ErrorBoundary() {
+  return <GenericErrorBoundary entityName="clients" />;
 }

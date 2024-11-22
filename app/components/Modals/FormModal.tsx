@@ -49,14 +49,14 @@ export default function FormModal({
             <button
               type="button"
               onClick={closeModal}
-              className="bg-gray-200 px-4 py-2 rounded"
+              className="bg-gray-200 px-4 py-2 rounded-lg"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={navigation.state === "submitting"}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg"
             >
               {navigation.state === "submitting" ? "Saving..." : "Save"}
             </button>

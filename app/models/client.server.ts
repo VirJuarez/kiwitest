@@ -52,7 +52,7 @@ export async function getClientById(id: number) {
   return db.client.findUnique({
     where: { id },
     include: {
-      orders: true, // Optional: include associated orders
+      orders: true,
     },
   });
 }

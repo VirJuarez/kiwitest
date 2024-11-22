@@ -31,7 +31,6 @@ export async function updateClient(
   id: number,
   data: Partial<Pick<Client, "name" | "surname" | "address" | "phone">>
 ) {
-  console.log(data);
   return db.client.update({
     where: { id },
     data,

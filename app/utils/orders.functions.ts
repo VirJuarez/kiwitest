@@ -23,45 +23,66 @@ type OrderItem = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const url = new URL(request.url);
-  const orderId = url.searchParams.get("edit");
-  const restaurantId = url.searchParams.get("restaurantId");
-  const clientId = url.searchParams.get("clientId");
+  try {
+    const url = new URL(request.url);
+    const orderId = url.searchParams.get("edit");
+    const restaurantId = url.searchParams.get("restaurantId");
+    const clientId = url.searchParams.get("clientId");
 
-  const filters = {
-    ...(restaurantId && { restaurantId: Number(restaurantId) }),
-    ...(clientId && { clientId: Number(clientId) }),
-  };
+    const filters = {
+      ...(restaurantId && { restaurantId: Number(restaurantId) }),
+      ...(clientId && { clientId: Number(clientId) }),
+    };
 
-  const orders = await getOrders(filters);
-  const { restaurants, clients } = await getRestaurantsAndClients();
-  const editingOrder = orderId ? await getOrderById(Number(orderId)) : null;
+    const [orders, { restaurants, clients }] = await Promise.all([
+      getOrders(filters),
+      getRestaurantsAndClients(),
+    ]);
 
-  return json({
-    orders,
-    restaurants,
-    clients,
-    editingOrder,
-    orderStatuses: ORDER_STATUSES,
-  });
+    let editingOrder = null;
+    if (orderId) {
+      editingOrder = await getOrderById(Number(orderId));
+      if (!editingOrder) {
+        throw new Error(`Order with id ${orderId} not found`);
+      }
+    }
+
+    return json({
+      orders,
+      restaurants,
+      clients,
+      editingOrder,
+      orderStatuses: ORDER_STATUSES,
+    });
+  } catch (error) {
+    console.error("Error in orders loader:", error);
+    throw json(
+      { error: "An error occurred while loading orders" },
+      { status: 500 }
+    );
+  }
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-  const id = formData.get("id")?.toString();
-  const restaurantId = Number(formData.get("restaurantId"));
-  const clientId = Number(formData.get("clientId"));
-  const status = formData.get("status")?.toString() as OrderStatus;
-
-  const itemsJson = formData.get("items")?.toString() || "[]";
-  const items = JSON.parse(itemsJson);
-
-  const total = items.reduce(
-    (sum: number, item: OrderItem) => sum + item.quantity * item.unitPrice,
-    0
-  );
-
   try {
+    const formData = await request.formData();
+    const id = formData.get("id")?.toString();
+    const restaurantId = Number(formData.get("restaurantId"));
+    const clientId = Number(formData.get("clientId"));
+    const status = formData.get("status")?.toString() as OrderStatus;
+
+    const itemsJson = formData.get("items")?.toString() || "[]";
+    const items = JSON.parse(itemsJson);
+
+    if (!Array.isArray(items)) {
+      throw new Error("Invalid items data");
+    }
+
+    const total = items.reduce(
+      (sum: number, item: OrderItem) => sum + item.quantity * item.unitPrice,
+      0
+    );
+
     if (id) {
       // Update only status when editing
       await updateOrder(Number(id), { status });
@@ -77,10 +98,9 @@ export const action: ActionFunction = async ({ request }) => {
     }
     return redirect("/orders");
   } catch (error) {
+    console.error("Error in orders action:", error);
     return json(
-      {
-        error: "Error saving the order",
-      },
+      { error: "An error occurred while processing the order" },
       { status: 500 }
     );
   }

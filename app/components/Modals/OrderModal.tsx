@@ -254,22 +254,35 @@ export default function OrderModal({
           {actionData?.error && (
             <div className="text-red-500">{actionData.error}</div>
           )}
-          <div className="flex justify-end space-x-2">
-            <button
-              type="button"
-              onClick={closeModal}
-              className="bg-gray-200 px-4 py-2 rounded-lg"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={navigation.state === "submitting"}
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-            >
-              {navigation.state === "submitting" ? "Saving..." : "Save"}
-            </button>
-          </div>
+
+          {editingOrder?.status !== "COMPLETED" ? (
+            <div className="flex justify-end space-x-2">
+              <button
+                type="button"
+                onClick={closeModal}
+                className="bg-gray-200 px-4 py-2 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={navigation.state === "submitting"}
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+              >
+                {navigation.state === "submitting" ? "Saving..." : "Save"}
+              </button>
+            </div>
+          ) : (
+            <div className="flex justify-end space-x-2">
+              <button
+                type="button"
+                onClick={closeModal}
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+              >
+                Close
+              </button>
+            </div>
+          )}
         </Form>
       </div>
     </div>

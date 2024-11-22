@@ -57,6 +57,12 @@ export default function Orders() {
   return (
     <div className="bg-purple-100 w-full min-h-screen m-0 ">
       <Layout title="Orders" action={openNewModal} color="bg-purple-700">
+        <Filter
+          restaurants={restaurants}
+          clients={clients}
+          searchParams={searchParams}
+          submit={submit}
+        />
         {orders.length === 0 ? (
           <NoObjectCard
             onClickAction={openNewModal}
@@ -66,46 +72,37 @@ export default function Orders() {
             color="bg-purple-700"
           />
         ) : (
-          <div>
-            <Filter
-              restaurants={restaurants}
-              clients={clients}
-              searchParams={searchParams}
-              submit={submit}
-            />
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {orders.map((order: DetailedOrder) => (
-                <Card
-                  key={order.id}
-                  id={order.id}
-                  title={`Order #${order.id}`}
-                  createdAt={`${dayjs(order.createdAt).format(
-                    "MM-DD-YYYY HH:mm"
-                  )}`}
-                  attributes={[
-                    { key: "Restaurant", label: order.restaurant.name },
-                    {
-                      key: "Client",
-                      label: `${order.client.name} ${order.client.surname}`,
-                    },
-                    {
-                      key: "Status",
-                      label:
-                        order.status === "COMPLETED"
-                          ? `${ORDER_STATUSES[order.status]} (${dayjs(
-                              order.completedAt
-                            ).format("MM-DD-YYYY HH:mm")})`
-                          : ORDER_STATUSES[order.status],
-                    },
-                    { key: "Total", label: order.total.toFixed(2) },
-                  ]}
-                  editAction={() =>
-                    setSearchParams({ edit: order.id.toString() })
-                  }
-                />
-              ))}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {orders.map((order: DetailedOrder) => (
+              <Card
+                key={order.id}
+                id={order.id}
+                title={`Order #${order.id}`}
+                createdAt={`${dayjs(order.createdAt).format(
+                  "MM-DD-YYYY HH:mm"
+                )}`}
+                attributes={[
+                  { key: "Restaurant", label: order.restaurant.name },
+                  {
+                    key: "Client",
+                    label: `${order.client.name} ${order.client.surname}`,
+                  },
+                  {
+                    key: "Status",
+                    label:
+                      order.status === "COMPLETED"
+                        ? `${ORDER_STATUSES[order.status]} (${dayjs(
+                            order.completedAt
+                          ).format("MM-DD-YYYY HH:mm")})`
+                        : ORDER_STATUSES[order.status],
+                  },
+                  { key: "Total", label: order.total.toFixed(2) },
+                ]}
+                editAction={() =>
+                  setSearchParams({ edit: order.id.toString() })
+                }
+              />
+            ))}
           </div>
         )}
 

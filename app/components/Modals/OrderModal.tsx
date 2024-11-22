@@ -151,7 +151,7 @@ export default function OrderModal({
                     <div className="flex flex-col w-1/5">
                       <label className="text-xs">Unit Price</label>
                       <input
-                        type="number"
+                        type="text"
                         placeholder="0"
                         value={item.unitPrice}
                         onChange={(e) =>

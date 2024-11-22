@@ -42,6 +42,7 @@ export default function Restaurants() {
   return (
     <div className="bg-orange-100 w-full min-h-screen m-0 ">
       <Layout title="Restaurants" action={openNewModal} color="bg-orange-700">
+        <OrderAZ sortOrder={sortOrder} color="bg-orange-700" />
         {restaurants.length === 0 ? (
           <NoObjectCard
             onClickAction={openNewModal}
@@ -51,28 +52,25 @@ export default function Restaurants() {
             color="bg-orange-700"
           />
         ) : (
-          <div>
-            <OrderAZ sortOrder={sortOrder} color="bg-orange-700" />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {restaurants.map((restaurant: Restaurant) => (
-                <Card
-                  id={restaurant.id}
-                  avatar={restaurant.name}
-                  title={restaurant.name}
-                  attributes={[
-                    { key: "Address", label: restaurant.address },
-                    { key: "Phone", label: restaurant.phone },
-                  ]}
-                  editAction={() =>
-                    setSearchParams({ edit: restaurant.id.toString() })
-                  }
-                  deleteAction={(e) => {
-                    e.preventDefault();
-                    openDeleteModal(restaurant.id);
-                  }}
-                />
-              ))}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {restaurants.map((restaurant: Restaurant) => (
+              <Card
+                id={restaurant.id}
+                avatar={restaurant.name}
+                title={restaurant.name}
+                attributes={[
+                  { key: "Address", label: restaurant.address },
+                  { key: "Phone", label: restaurant.phone },
+                ]}
+                editAction={() =>
+                  setSearchParams({ edit: restaurant.id.toString() })
+                }
+                deleteAction={(e) => {
+                  e.preventDefault();
+                  openDeleteModal(restaurant.id);
+                }}
+              />
+            ))}
           </div>
         )}
 

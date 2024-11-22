@@ -41,6 +41,7 @@ export default function Clients() {
   return (
     <div className="bg-lime-100 w-full min-h-screen m-0 ">
       <Layout title="Clients" action={openNewModal} color="bg-lime-700">
+        <OrderAZ sortOrder={sortOrder} color="bg-lime-700" />
         {clients.length === 0 ? (
           <NoObjectCard
             onClickAction={openNewModal}
@@ -50,28 +51,25 @@ export default function Clients() {
             color="bg-lime-700"
           />
         ) : (
-          <div>
-            <OrderAZ sortOrder={sortOrder} color="bg-lime-700" />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {clients.map((client: Client) => (
-                <Card
-                  id={client.id}
-                  avatar={`${client.name} ${client.surname}`}
-                  title={`${client.name} ${client.surname}`}
-                  attributes={[
-                    { key: "Address", label: client.address },
-                    { key: "Phone", label: client.phone },
-                  ]}
-                  editAction={() =>
-                    setSearchParams({ edit: client.id.toString() })
-                  }
-                  deleteAction={(e) => {
-                    e.preventDefault();
-                    openDeleteModal(client.id);
-                  }}
-                />
-              ))}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {clients.map((client: Client) => (
+              <Card
+                id={client.id}
+                avatar={`${client.name} ${client.surname}`}
+                title={`${client.name} ${client.surname}`}
+                attributes={[
+                  { key: "Address", label: client.address },
+                  { key: "Phone", label: client.phone },
+                ]}
+                editAction={() =>
+                  setSearchParams({ edit: client.id.toString() })
+                }
+                deleteAction={(e) => {
+                  e.preventDefault();
+                  openDeleteModal(client.id);
+                }}
+              />
+            ))}
           </div>
         )}
 

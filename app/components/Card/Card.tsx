@@ -41,7 +41,7 @@ export default function Card({
           className="bg-yellow-500 text-white px-2 py-1 rounded flex-grow flex items-center justify-center gap-2"
         >
           <PencilSquareIcon className="w-5" />
-          Edit
+          {title.toLowerCase().includes("order") ? "Detail" : "Edit"}
         </button>
         {deleteAction && (
           <Form method="post" className="flex-grow">

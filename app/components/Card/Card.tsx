@@ -1,9 +1,7 @@
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
-import { ChevronDoubleLeftIcon } from "@heroicons/react/24/outline";
-import { Form, Link } from "@remix-run/react";
+import { Form } from "@remix-run/react";
 import Avatar from "./Avatar";
-//import { Button } from "~/components/ui/button";
 
 interface CardProps {
   id: number;

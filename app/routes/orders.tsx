@@ -20,10 +20,11 @@ import {
 } from "~/models/order.server";
 import { Client } from "~/models/client.server";
 import { Restaurant } from "~/models/restaurant.server";
-import Card from "~/components/Card";
+import Card from "~/components/Card/Card";
 import dayjs from "dayjs";
 import { useState } from "react";
-import OrderModal from "~/components/OrderModal";
+import OrderModal from "~/components/Modals/OrderModal";
+import Filter from "~/components/OrderFilter/Filter";
 
 const ORDER_STATUSES = {
   PENDING: "Pending",
@@ -127,104 +128,15 @@ export default function Orders() {
     setSearchParams({});
   };
 
-  const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = event.target;
-    const newSearchParams = new URLSearchParams(searchParams);
-    if (value) {
-      newSearchParams.set(name, value);
-    } else {
-      newSearchParams.delete(name);
-    }
-    submit(newSearchParams);
-  };
-
-  const resetFilters = () => {
-    submit({});
-  };
-
-  const addOrderItem = () => {
-    setOrderItems([
-      ...orderItems,
-      { quantity: 1, unitPrice: 0, description: "" },
-    ]);
-  };
-
-  const updateOrderItem = (
-    index: number,
-    field: keyof OrderItem,
-    value: number | string
-  ) => {
-    const newItems = [...orderItems];
-    newItems[index] = { ...newItems[index], [field]: value };
-    setOrderItems(newItems);
-  };
-
-  const removeOrderItem = (index: number) => {
-    setOrderItems(orderItems.filter((_, i) => i !== index));
-  };
-
-  const calculateTotal = () => {
-    return orderItems
-      .reduce((sum, item) => sum + item.quantity * item.unitPrice, 0)
-      .toFixed(2);
-  };
-
   return (
     <div className="bg-purple-100 w-full min-h-screen m-0 ">
       <Layout title="Orders" action={openNewModal} color="bg-purple-700">
-        <Form method="get" className="mb-4 flex space-x-4 items-end">
-          <div>
-            <label
-              htmlFor="restaurantId"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Filter by Restaurant
-            </label>
-            <select
-              id="restaurantId"
-              name="restaurantId"
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-              onChange={handleFilterChange}
-              value={searchParams.get("restaurantId") || ""}
-            >
-              <option value="">All Restaurants</option>
-              {restaurants.map((restaurant: Restaurant) => (
-                <option key={restaurant.id} value={restaurant.id}>
-                  {restaurant.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label
-              htmlFor="clientId"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Filter by Client
-            </label>
-            <select
-              id="clientId"
-              name="clientId"
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-              onChange={handleFilterChange}
-              value={searchParams.get("clientId") || ""}
-            >
-              <option value="">All Clients</option>
-              {clients.map((client: Client) => (
-                <option key={client.id} value={client.id}>
-                  {client.name} {client.surname}
-                </option>
-              ))}
-            </select>
-          </div>
-          <button
-            type="button"
-            onClick={resetFilters}
-            className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
-          >
-            Reset Filters
-          </button>
-        </Form>
+        <Filter
+          restaurants={restaurants}
+          clients={clients}
+          searchParams={searchParams}
+          submit={submit}
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {orders.map((order: DetailedOrder) => (

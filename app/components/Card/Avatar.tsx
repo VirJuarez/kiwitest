@@ -18,7 +18,7 @@ const Avatar: React.FC<AvatarProps> = ({
       .split(" ")
       .map((n) => n[0]?.toUpperCase())
       .join("")
-      .slice(0, 2); // Máximo 2 iniciales
+      .slice(0, 2);
   };
 
   const generateRandomColor = () => {
@@ -37,7 +37,7 @@ const Avatar: React.FC<AvatarProps> = ({
 
   useEffect(() => {
     setBgColor(generateRandomColor());
-  }, []); // Se ejecuta solo al montar el componente
+  }, []);
 
   return (
     <div

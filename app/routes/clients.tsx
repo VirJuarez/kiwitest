@@ -16,10 +16,11 @@ import {
   getClientById,
   deleteClient,
 } from "~/models/client.server";
-import Card from "~/components/Card";
+import Card from "~/components/Card/Card";
 import React, { useState } from "react";
-import DeleteModal from "~/components/DeleteModal";
-import FormModal from "~/components/FormModal";
+import DeleteModal from "~/components/Modals/DeleteModal";
+import FormModal from "~/components/Modals/FormModal";
+import OrderAZ from "~/components/OrderFilter/OrderAZ";
 
 export const loader: LoaderFunction = async ({ request }) => {
   try {
@@ -106,16 +107,7 @@ export default function Clients() {
   return (
     <div className="bg-lime-100 w-full min-h-screen m-0 ">
       <Layout title="Clients" action={openNewModal} color="bg-lime-700">
-        <Form method="get">
-          <button
-            type="submit"
-            name="sortOrder"
-            value={sortOrder === "asc" ? "desc" : "asc"}
-            className="bg-lime-600 text-white px-4 py-2 rounded"
-          >
-            Sort {sortOrder === "asc" ? "A/Z" : "Z/A"}
-          </button>
-        </Form>
+        <OrderAZ sortOrder={sortOrder} color="bg-lime-700" />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {clients.map(
             (client: {

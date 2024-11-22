@@ -36,12 +36,10 @@ export async function updateRestaurant(
 }
 
 export async function deleteRestaurant(id: number) {
-  // Delete associated orders first to handle cascading deletion
   await db.order.deleteMany({
     where: { restaurantId: id },
   });
 
-  // Then delete the restaurant
   return db.restaurant.delete({
     where: { id },
   });
@@ -51,7 +49,7 @@ export async function getRestaurantById(id: number) {
   return db.restaurant.findUnique({
     where: { id },
     include: {
-      orders: true, // Opcional: incluir órdenes asociadas
+      orders: true,
     },
   });
 }

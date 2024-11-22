@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 
 interface AvatarProps {
   name: string;
-  size?: string; // Tamaño opcional (por defecto "w-12 h-12")
-  textColor?: string; // Color del texto opcional
+  size?: string;
+  textColor?: string;
 }
 
 const Avatar: React.FC<AvatarProps> = ({

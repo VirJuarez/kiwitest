@@ -26,9 +26,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       sortOrder,
     });
   } catch (error) {
-    console.error("Error detallado:", error);
-    // Manejo específico de errores
-    throw new Error(`Error en clients route: ${error}`);
+    throw new Error(`Error in clients route: ${error}`);
   }
 };
 
@@ -50,10 +48,8 @@ export const action: ActionFunction = async ({ request }) => {
     const phone = formData.get("phone")?.toString() || "";
 
     if (id) {
-      // Update
       await updateClient(Number(id), { name, surname, address, phone });
     } else {
-      // Create
       await createClient({ name, surname, address, phone });
     }
     return redirect("/clients");

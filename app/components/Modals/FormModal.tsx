@@ -8,8 +8,6 @@ interface ModalProps {
   editingClient: any;
 }
 
-//fields: name
-
 export default function FormModal({
   navigation,
   fields,

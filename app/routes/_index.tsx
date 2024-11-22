@@ -8,8 +8,8 @@ import {
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Kiwitest" },
+    { name: "Remix Technical Test ", content: "Welcome to Kiwitest!" },
   ];
 };
 

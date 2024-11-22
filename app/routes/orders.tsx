@@ -14,6 +14,7 @@ import { useState } from "react";
 import OrderModal from "~/components/Modals/OrderModal";
 import Filter from "~/components/OrderFilter/Filter";
 import { loader, action } from "~/utils/orders.functions";
+import NoObjectCard from "~/components/Card/NoObjectCard";
 export { loader, action };
 
 const ORDER_STATUSES = {
@@ -55,42 +56,58 @@ export default function Orders() {
   return (
     <div className="bg-purple-100 w-full min-h-screen m-0 ">
       <Layout title="Orders" action={openNewModal} color="bg-purple-700">
-        <Filter
-          restaurants={restaurants}
-          clients={clients}
-          searchParams={searchParams}
-          submit={submit}
-        />
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {orders.map((order: DetailedOrder) => (
-            <Card
-              key={order.id}
-              id={order.id}
-              avatar={`# ${order.id}`}
-              title={`Order #${order.id}`}
-              createdAt={`${dayjs(order.createdAt).format("MM-DD-YYYY HH:mm")}`}
-              attributes={[
-                { key: "Restaurant", label: order.restaurant.name },
-                {
-                  key: "Client",
-                  label: `${order.client.name} ${order.client.surname}`,
-                },
-                {
-                  key: "Status",
-                  label:
-                    order.status === "COMPLETED"
-                      ? `${ORDER_STATUSES[order.status]} (${dayjs(
-                          order.completedAt
-                        ).format("MM-DD-YYYY HH:mm")})`
-                      : ORDER_STATUSES[order.status],
-                },
-                { key: "Total", label: order.total.toFixed(2) },
-              ]}
-              editAction={() => setSearchParams({ edit: order.id.toString() })}
+        {orders.length === 0 ? (
+          <NoObjectCard
+            onClickAction={openNewModal}
+            title="No orders yet"
+            text="Click here to add your first order"
+            buttontext="Add Order"
+            color="bg-purple-700"
+          />
+        ) : (
+          <div>
+            <Filter
+              restaurants={restaurants}
+              clients={clients}
+              searchParams={searchParams}
+              submit={submit}
             />
-          ))}
-        </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {orders.map((order: DetailedOrder) => (
+                <Card
+                  key={order.id}
+                  id={order.id}
+                  avatar={`# ${order.id}`}
+                  title={`Order #${order.id}`}
+                  createdAt={`${dayjs(order.createdAt).format(
+                    "MM-DD-YYYY HH:mm"
+                  )}`}
+                  attributes={[
+                    { key: "Restaurant", label: order.restaurant.name },
+                    {
+                      key: "Client",
+                      label: `${order.client.name} ${order.client.surname}`,
+                    },
+                    {
+                      key: "Status",
+                      label:
+                        order.status === "COMPLETED"
+                          ? `${ORDER_STATUSES[order.status]} (${dayjs(
+                              order.completedAt
+                            ).format("MM-DD-YYYY HH:mm")})`
+                          : ORDER_STATUSES[order.status],
+                    },
+                    { key: "Total", label: order.total.toFixed(2) },
+                  ]}
+                  editAction={() =>
+                    setSearchParams({ edit: order.id.toString() })
+                  }
+                />
+              ))}
+            </div>
+          </div>
+        )}
 
         {isNewModalOpen && (
           <OrderModal

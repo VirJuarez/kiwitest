@@ -10,6 +10,7 @@ import DeleteModal from "~/components/Modals/DeleteModal";
 import FormModal from "~/components/Modals/FormModal";
 import OrderAZ from "~/components/OrderFilter/OrderAZ";
 import { loader, action } from "~/utils/restaurants.functions";
+import NoObjectCard from "~/components/Card/NoObjectCard";
 export { loader, action };
 
 export default function Restaurants() {
@@ -39,42 +40,55 @@ export default function Restaurants() {
   return (
     <div className="bg-orange-100 w-full min-h-screen m-0 ">
       <Layout title="Restaurants" action={openNewModal} color="bg-orange-700">
-        <OrderAZ sortOrder={sortOrder} color="bg-orange-700" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {restaurants.map(
-            (restaurant: {
-              name: string;
-              address: string;
-              phone: string;
-              id: number;
-            }) => (
-              <Card
-                id={restaurant.id}
-                avatar={restaurant.name}
-                title={restaurant.name}
-                attributes={[
-                  { key: "Address", label: restaurant.address },
-                  { key: "Phone", label: restaurant.phone },
-                ]}
-                editAction={() =>
-                  setSearchParams({ edit: restaurant.id.toString() })
-                }
-                deleteAction={(e) => {
-                  e.preventDefault();
-                  openDeleteModal(restaurant.id);
-                }}
-              />
-            )
-          )}
-        </div>
+        {restaurants.length === 0 ? (
+          <NoObjectCard
+            onClickAction={openNewModal}
+            title="No restaurants registered yet"
+            text="Click here to add your first restaurant"
+            buttontext="Add Restaurant"
+            color="bg-orange-700"
+          />
+        ) : (
+          <div>
+            <OrderAZ sortOrder={sortOrder} color="bg-orange-700" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {restaurants.map(
+                (restaurant: {
+                  name: string;
+                  address: string;
+                  phone: string;
+                  id: number;
+                }) => (
+                  <Card
+                    id={restaurant.id}
+                    avatar={restaurant.name}
+                    title={restaurant.name}
+                    attributes={[
+                      { key: "Address", label: restaurant.address },
+                      { key: "Phone", label: restaurant.phone },
+                    ]}
+                    editAction={() =>
+                      setSearchParams({ edit: restaurant.id.toString() })
+                    }
+                    deleteAction={(e) => {
+                      e.preventDefault();
+                      openDeleteModal(restaurant.id);
+                    }}
+                  />
+                )
+              )}
+            </div>
+          </div>
+        )}
 
         {isModalOpen && (
           <FormModal
             navigation={navigation}
             fields={["name", "address", "phone"]}
             closeModal={closeModal}
-            editingClient={editingRestaurant}
+            editing={editingRestaurant}
             actionData={actionData}
+            title="Restaurant"
           />
         )}
 

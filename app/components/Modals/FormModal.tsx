@@ -5,26 +5,26 @@ interface ModalProps {
   fields: string[];
   closeModal: () => void;
   actionData: any;
-  editingClient: any;
+  editing: any;
+  title: string;
 }
 
 export default function FormModal({
   navigation,
   fields,
   closeModal,
-  editingClient,
+  editing,
   actionData,
+  title,
 }: ModalProps) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg w-96">
         <h2 className="text-xl font-bold mb-4">
-          {editingClient ? "Edit Client" : "New Client"}
+          {editing ? `Edit ${title}` : `New ${title}`}
         </h2>
         <Form method="post" className="space-y-4">
-          {editingClient && (
-            <input type="hidden" name="id" value={editingClient.id} />
-          )}
+          {editing && <input type="hidden" name="id" value={editing.id} />}
           {fields.map((field) => (
             <div id={field}>
               <label className="block mb-2">
@@ -33,7 +33,7 @@ export default function FormModal({
               <input
                 type="text"
                 name={field}
-                defaultValue={editingClient ? editingClient[field] : ""}
+                defaultValue={editing ? editing[field] : ""}
                 className="w-full border rounded p-2"
                 required
               />

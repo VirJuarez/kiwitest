@@ -23,7 +23,7 @@ export default function Card({
   attributes,
 }: CardProps) {
   return (
-    <div key={id} className="border p-4 rounded-xl bg-white">
+    <div key={id} className="border p-4 rounded-xl bg-white shadow-lg">
       <div className="flex items-center gap-4 mb-3 w-full">
         {avatar && <Avatar name={`${avatar}`} />}
         <h2 className="text-2xl font-semibold">{title}</h2>

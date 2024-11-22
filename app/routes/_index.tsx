@@ -45,7 +45,7 @@ export default function Home() {
           {sections.map((section) => (
             <Link
               to={section.redirect}
-              className={`h-32 w-full md:w-2/5  border-solid border-black border-2  rounded-xl flex items-center p-10 ${section.color} bg-opacity-60 hover:bg-opacity-100`}
+              className={`h-32 w-full md:w-2/5  border-solid border-black border-2  rounded-xl flex items-center p-10 ${section.color} bg-opacity-60 hover:bg-opacity-100 shadow-xl`}
             >
               <div className="w-20 border rounded-xl p-2  bg-white bg-opacity-60">
                 {section.icon}

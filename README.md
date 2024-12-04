@@ -4,7 +4,7 @@ A full-stack application for managing Clients, Orders, and Restaurants built wit
 
 ## 🚀 Live Demo
 
-- [Application](https://kiwitest-741772251938.southamerica-east1.run.app/)
+- [Application](https://kiwitest.vercel.app/)
 - [GitHub Repository](https://github.com/VirJuarez/kiwitest)
 
 ## 🛠️ Tech Stack
